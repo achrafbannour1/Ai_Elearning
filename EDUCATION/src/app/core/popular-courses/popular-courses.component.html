@@ -1,0 +1,54 @@
+<section class="popular">
+  <div class="container head">
+    <h2>Popular courses.</h2>
+    <a class="explore" href="#" aria-label="Explore courses">Explore courses ↗</a>
+  </div>
+
+  <div class="container grid">
+    <article class="card reveal" #card *ngFor="let c of courses">
+      <div class="media">
+        <img [src]="c.image" [alt]="c.title">
+        <span class="badge" *ngIf="c.bestSeller">BEST<br>SELLER</span>
+      </div>
+
+      <div class="content">
+        <h3 class="title">{{ c.title }}</h3>
+        <p class="teacher">{{ c.teacher }}</p>
+
+        <div class="row rating-price">
+          <div class="rating">
+            <span class="rating-val">{{ c.rating }}</span>
+            <ng-container *ngFor="let s of [1,2,3,4,5]; let i = index">
+              <svg class="star" [class.filled]="i < Math.round(c.rating)"
+                   viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2l2.9 6.1 6.7.9-4.9 4.8 1.2 6.7L12 17.8 6.1 20.5l1.2-6.7L2.4 9l6.7-.9L12 2z"/>
+              </svg>
+            </ng-container>
+          </div>
+
+          <div class="price">\${{ c.price }}</div>
+        </div>
+
+        <hr class="divider"/>
+
+        <div class="row meta">
+          <div class="meta-item">
+            <svg class="mini" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 5h16v14H4z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M4 9h16" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <span>{{ c.classes }} classes</span>
+          </div>
+
+          <div class="meta-item">
+            <svg class="mini" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" fill="currentColor"/>
+              <path d="M4 20c.7-3.4 4.2-6 8-6s7.3 2.6 8 6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <span>{{ c.students }} students</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>

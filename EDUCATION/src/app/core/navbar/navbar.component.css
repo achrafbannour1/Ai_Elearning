@@ -1,0 +1,15 @@
+.nav{background:#fff; position:sticky; top:0; z-index:50; border-bottom:1px solid #eef2ff}
+.nav-inner{display:flex; align-items:center; justify-content:space-between; height:80px}
+.brand{display:flex; align-items:center; gap:.55rem; font-weight:700; text-decoration:none; color:var(--dark)}
+.brand-mark{width:28px; height:28px; object-fit:contain}
+.brand-dot{color:var(--brand)}
+.links{display:flex; gap:28px; align-items:center}
+.links a{color:#111827; text-decoration:none; font-weight:500; position:relative}
+.links a.active::after{
+  content:""; position:absolute; left:0; right:0; bottom:-12px; height:4px;
+  background:var(--brand); border-radius:999px;
+}
+.cta{display:flex; gap:12px; align-items:center}
+@media (max-width: 960px){
+  .links{display:none}
+}

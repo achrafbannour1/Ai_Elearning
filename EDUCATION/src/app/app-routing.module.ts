@@ -1,0 +1,32 @@
+import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './core/home/home.component';
+import { LoginComponent } from './core/login/login.component';
+import { RegisterComponent } from './core/register/register.component';
+import { NgModule } from '@angular/core';
+import {EventComponent} from "./core/event/event.component";
+import {EventDetailComponent} from "./core/event-detail/event-detail.component";
+
+export const routes: Routes = [
+  { path: '', component: HomeComponent, title: 'E-learning | Home' },
+  { path: '**', redirectTo: 'E-learning | Home' ,pathMatch :'full' },
+   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+
+  // place-holders pour le menu (crée-les plus tard si besoin)
+  { path: 'courses', component: HomeComponent, title: 'Courses' },
+  { path: 'mentor', component: HomeComponent, title: 'Mentor' },
+  { path: 'group', component: HomeComponent, title: 'Group' },
+  { path: 'testimonial', component: HomeComponent, title: 'Testimonial' },
+  { path: 'docs', component: HomeComponent, title: 'Docs' },
+  { path: 'events', component: EventComponent, title: 'E-learning | Events' },
+  {path: 'event/:id', component: EventDetailComponent}
+
+
+];
+
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }

@@ -1,0 +1,144 @@
+/* === Assurer que tous les parents prennent 100% === */
+html, body, app-root, app-login {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* === Body et centrage === */
+body, app-login {
+  display: flex;
+  justify-content: center; /* centre horizontalement */
+  align-items: center;     /* centre verticalement */
+  font-family: 'Poppins', sans-serif;
+}
+
+/* === Conteneur du formulaire === */
+form {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 400px;
+  animation: fadeInUp 1s ease forwards;
+  margin: 10px; /* Marge de sécurité sur petits écrans */
+  box-sizing: border-box;
+}
+
+/* === Titre === */
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+  font-weight: 600;
+  position: relative;
+}
+
+h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #6b73ff;
+  margin: 10px auto 0;
+  border-radius: 2px;
+  transform: scaleX(0);
+  animation: lineGrow 0.5s ease forwards 0.5s;
+}
+
+/* === Inputs === */
+form div {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #6b73ff;
+  box-shadow: 0 0 8px rgba(107, 115, 255, 0.4);
+}
+
+/* === Bouton === */
+button {
+  width: 100%;
+  padding: 12px;
+  background: #6b73ff;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #000dff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* === Lien === */
+p {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+p a {
+  color: #6b73ff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+p a:hover {
+  color: #000dff;
+}
+
+/* === Message d'erreur === */
+div[ng-reflect-ng-if] {
+  font-size: 0.85rem;
+  color: red;
+  text-align: center;
+  animation: shake 0.3s ease;
+}
+
+/* === Animations === */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lineGrow {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}

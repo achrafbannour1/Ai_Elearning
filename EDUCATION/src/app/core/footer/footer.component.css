@@ -1,0 +1,24 @@
+.footer{background:#d9f1ff}
+.grid{
+  display:grid; gap:32px; grid-template-columns: 1.2fr .8fr .8fr 1fr;
+  padding-block:56px;
+}
+.brand .logo{font-weight:700; font-size:28px}
+.brand .dot{color:var(--brand); margin-left:6px}
+.social{display:flex; gap:14px; margin-top:10px}
+.social img{width:22px; height:22px}
+.col h4{margin:0 0 12px 0}
+.col ul{padding:0; margin:0; list-style:none}
+.col a{text-decoration:none; color:#111827}
+.contact p{margin:.4rem 0}
+
+.bar{border-top:1px solid rgba(0,0,0,.08); padding-block:18px; background:#d9f1ff}
+.bar-inner{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.policies{display:flex; gap:18px; align-items:center}
+.policies a{text-decoration:none; color:#111827}
+@media (max-width: 960px){
+  .grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width: 640px){
+  .grid{grid-template-columns:1fr}
+}

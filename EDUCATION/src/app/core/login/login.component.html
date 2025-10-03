@@ -1,0 +1,38 @@
+<body>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <!-- Titre dans le contour -->
+    <h2 class="form-title">Connexion</h2>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="Entrez votre email" />
+    </div>
+
+    <!-- Mot de passe -->
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <input type="password" formControlName="password" placeholder="Entrez votre mot de passe" />
+    </div>
+
+    <!-- reCAPTCHA -->
+    <div class="form-group captcha">
+      <re-captcha
+        siteKey="6LcMqIorAAAAAA-4cVPB4Mqk71QCQTPGL3eVC1_a"
+        (resolved)="onCaptchaResolved($event)">
+      </re-captcha>
+    </div>
+
+    <!-- Bouton -->
+    <button type="submit">Se connecter</button>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <p class="register-link">
+      Pas de compte ? <a routerLink="/register">S'inscrire ici</a>
+    </p>
+  </form>
+</body>

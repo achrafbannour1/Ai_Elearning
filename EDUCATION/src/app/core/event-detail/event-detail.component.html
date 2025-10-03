@@ -1,0 +1,22 @@
+<div class="container mt-5">
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+  <div *ngIf="event" class="card event-detail-card">
+    <img [src]="event.image" class="card-img-top" [alt]="event.title" style="max-height: 300px; object-fit: cover;">
+    <div class="card-body">
+      <h2 class="card-title">{{ event.title }}</h2>
+      <p class="card-text"><strong>Date:</strong> {{ event.date | date:'medium' }}</p>
+      <p class="card-text"><strong>Seats Left:</strong> {{ event.seatsLeft }}</p>
+      <p class="card-text"><strong>Status:</strong> {{ event.isFull ? 'Event Full' : 'Available' }}</p>
+      <p class="card-text">{{ event.description }}</p>
+      <button class="btn btn-success" (click)="joinEvent()" [disabled]="isAlreadyJoined || event.isFull || event.seatsLeft <= 0">
+        {{ isAlreadyJoined ? 'Already Joined' : 'Join Event' }}
+      </button>
+      <div *ngIf="event.users?.length" class="mt-3">
+        <h4>Registered Users</h4>
+        <ul>
+          <li *ngFor="let user of event.users">{{ user.email }} ({{ user.role }})</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
