@@ -26,35 +26,43 @@ public class JwitFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
         final String authorizationHeader = request.getHeader("Authorization");
-        String username = null;
+        String email = null;
         String jwt = null;
+
+        System.out.println("Request URL: " + request.getRequestURI());
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             try {
-                username = jwtUtil.extractUsername(jwt);
-                System.out.println("JWT Username: " + username);
+                email = jwtUtil.extractUsername(jwt);
+                System.out.println("Extracted JWT Email: " + email);
             } catch (Exception e) {
                 System.err.println("JWT extraction failed: " + e.getMessage());
             }
+        } else {
+            System.out.println("No Bearer token found in Authorization header");
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            String finalUsername = username;
-            User user = userRepository.findByEmail(username)
-                    .orElseThrow(() -> new RuntimeException("User not found: " + finalUsername));
-            System.out.println("User found: " + user.getEmail() + ", ID: " + user.getId());
-            if (jwtUtil.isTokenValid(jwt, user.getEmail())) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-                System.out.println("Authentication set for: " + user.getEmail());
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            User user = userRepository.findByEmail(email).orElse(null);
+            if (user != null) {
+                if (jwtUtil.isTokenValid(jwt, user.getEmail())) {
+                    System.out.println("User found: " + user.getEmail() + ", ID: " + user.getId());
+                    // Use email as principal instead of User object
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(email, null, user.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    System.out.println("Authentication set for: " + email);
+                } else {
+                    System.err.println("Invalid JWT token for email: " + email);
+                }
             } else {
-                System.err.println("Invalid JWT token for: " + username);
+                System.err.println("User not found for email: " + email);
             }
+        } else if (email == null) {
+            System.out.println("No email extracted from JWT or authentication already set");
         }
 
         filterChain.doFilter(request, response);

@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/student/**").hasRole("STUDENT")
                         .requestMatchers("/event/register/**").authenticated()  // Require login for joining
                         .requestMatchers("/event/**").permitAll()  // Public for viewing events
+                        .requestMatchers("/api/ollama/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

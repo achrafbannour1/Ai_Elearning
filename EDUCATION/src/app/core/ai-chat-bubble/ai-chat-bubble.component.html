@@ -1,0 +1,80 @@
+<!-- Floating Chat Bubble -->
+<div class="chat-bubble-container">
+  <!-- Chat Window -->
+  <div class="chat-window" [class.open]="isOpen">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="header-content">
+        <div class="ai-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="header-text">
+          <h4>AI Assistant</h4>
+          <span class="status">Online</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" (click)="clearChat()" title="Clear chat">
+          <i class="fas fa-trash"></i>
+        </button>
+        <button class="icon-btn" (click)="toggleChat()" title="Close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages Area -->
+    <div class="chat-messages" #messagesContainer>
+      <div *ngFor="let msg of messages" class="message" [class.user-message]="msg.isUser">
+        <div class="message-bubble">
+          <p [innerHTML]="msg.text "></p>
+          <span class="message-time">{{ msg.timestamp | date:'short' }}</span>
+        </div>
+      </div>
+
+      <!-- Loading indicator -->
+      <div *ngIf="isLoading" class="message">
+        <div class="message-bubble typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="chat-input-area">
+      <button
+        class="voice-btn"
+        [class.listening]="isListening"
+        (click)="isListening ? stopVoiceInput() : startVoiceInput()"
+        title="Voice input">
+        <i class="fas fa-microphone" [class.fa-microphone-slash]="isListening"></i>
+      </button>
+
+      <input
+        type="text"
+        class="chat-input"
+        [(ngModel)]="userInput"
+        (keyup.enter)="sendMessage()"
+        placeholder="Type your message or use voice..."
+        [disabled]="isLoading">
+
+      <button
+        class="send-btn"
+        (click)="sendMessage()"
+        [disabled]="!userInput.trim() || isLoading"
+        title="Send message">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Button -->
+  <button class="chat-bubble-btn" (click)="toggleChat()" [class.active]="isOpen">
+    <i class="fas" [ngClass]="isOpen ? 'fa-times' : 'fa-comment-dots'"></i>
+    <span class="notification-badge" *ngIf="!isOpen && messages.length > 1">
+      {{ messages.length - 1 }}
+    </span>
+  </button>
+</div>

@@ -35,11 +35,11 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest login) {
 
         // Vérifier le reCAPTCHA
-        boolean captchaVerified = recaptchaService.verifyToken(login.getRecaptchaToken());
+       /* boolean captchaVerified = recaptchaService.verifyToken(login.getRecaptchaToken());
         if (!captchaVerified) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("reCAPTCHA invalide");
-        }
+        }*/
 
         try {
             // Authentification
@@ -65,16 +65,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.ROLE_STUDENT); // par ex. ADMIN, STUDENT, etc.
-
-        userRepository.save(user);
-
+        user.setRole(Role.ROLE_STUDENT);
+        user = userRepository.saveAndFlush(user); // Force flush to DB
+        System.out.println("Registered user: " + user.getEmail() + ", ID: " + user.getId());
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
-
         return ResponseEntity.ok(new LoginResponse(token, user));
     }
 
