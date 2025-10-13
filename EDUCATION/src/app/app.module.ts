@@ -18,6 +18,7 @@ import { EventComponent } from './core/event/event.component';
 import { EventDetailComponent } from './core/event-detail/event-detail.component';
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import { AiChatBubbleComponent } from './core/ai-chat-bubble/ai-chat-bubble.component';
+import { AdminDashboardComponent } from './core/admin-dashboard/admin-dashboard.component';
 
 
 
@@ -28,7 +29,8 @@ import { AiChatBubbleComponent } from './core/ai-chat-bubble/ai-chat-bubble.comp
     RegisterComponent,
     EventComponent,
     EventDetailComponent,
-    AiChatBubbleComponent
+    AiChatBubbleComponent,
+    AdminDashboardComponent
   ],
     imports: [
         BrowserModule,

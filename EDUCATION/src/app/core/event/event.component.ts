@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../../../services/event.service';
 
-// Define the User interface for the nested users array
 export interface User {
   id: number;
   username: string | null;
   email: string;
-  password: string; // Optional, might want to exclude this from UI
+  password: string;
   role: string;
+  events?: Event[];
 }
 
-// Update the Event interface to include users
 export interface Event {
   id: number;
   title: string;
@@ -19,7 +18,8 @@ export interface Event {
   isFull: boolean;
   image: string;
   description: string;
-  users: User[]; // Added users array
+  users?: User[];
+  aiPrompt?: string;
 }
 
 @Component({
@@ -30,16 +30,23 @@ export interface Event {
 export class EventComponent implements OnInit {
   events: Event[] = [];
   selectedEvent: Event | null = null;
+  private apiBaseUrl = 'http://localhost:8083';
 
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
     this.eventService.getEvents().subscribe((events: Event[]) => {
-      this.events = events;
+      this.events = events.map(event => ({
+        ...event,
+        image: event.image ? (event.image.startsWith('http://') || event.image.startsWith('https://') ? event.image : `${this.apiBaseUrl}${event.image}`) : ''
+      }));
     });
   }
 
   selectEvent(event: Event): void {
-    this.selectedEvent = event;
+    this.selectedEvent = {
+      ...event,
+      image: event.image ? (event.image.startsWith('http://') || event.image.startsWith('https://') ? event.image : `${this.apiBaseUrl}${event.image}`) : ''
+    };
   }
 }

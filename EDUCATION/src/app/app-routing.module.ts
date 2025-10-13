@@ -5,6 +5,7 @@ import { RegisterComponent } from './core/register/register.component';
 import { NgModule } from '@angular/core';
 import {EventComponent} from "./core/event/event.component";
 import {EventDetailComponent} from "./core/event-detail/event-detail.component";
+import {AdminDashboardComponent} from "./core/admin-dashboard/admin-dashboard.component";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, title: 'E-learning | Home' },
@@ -19,8 +20,8 @@ export const routes: Routes = [
   { path: 'testimonial', component: HomeComponent, title: 'Testimonial' },
   { path: 'docs', component: HomeComponent, title: 'Docs' },
   { path: 'events', component: EventComponent, title: 'E-learning | Events' },
-  {path: 'event/:id', component: EventDetailComponent}
-
+  {path: 'event/:id', component: EventDetailComponent},
+  { path: 'admin', component: AdminDashboardComponent, title: 'Admin Dashboard' },
 
 ];
 

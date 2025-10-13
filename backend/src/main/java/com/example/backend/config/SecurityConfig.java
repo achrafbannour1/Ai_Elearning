@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/event/register/**").authenticated()  // Require login for joining
                         .requestMatchers("/event/**").permitAll()  // Public for viewing events
                         .requestMatchers("/api/ollama/**").authenticated()
+                        .requestMatchers("/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

@@ -4,7 +4,6 @@ import { EventService } from '../../../services/event.service';
 import { AuthService } from '../../../services/auth.service';
 import { Event, User } from '../event/event.component';
 
-// Custom interface for SpeechRecognition event
 interface SpeechRecognitionEvent {
   results: SpeechRecognitionResultList;
   resultIndex: number;
@@ -20,8 +19,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   isAlreadyJoined: boolean = false;
   isListening: boolean = false;
-  recognition: any | null = null; // Use 'any' for webkitSpeechRecognition
+  recognition: any | null = null;
   synthesis = window.speechSynthesis;
+  private apiBaseUrl = 'http://localhost:8083';
 
   constructor(
     private route: ActivatedRoute,
@@ -29,23 +29,18 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router
   ) {
-    // Initialize speech recognition
     if ('webkitSpeechRecognition' in window) {
       this.recognition = new (window as any).webkitSpeechRecognition();
       this.recognition.continuous = false;
       this.recognition.interimResults = false;
-      this.recognition.lang = 'en-US'; // Adjust to 'fr-FR' for French if needed
+      this.recognition.lang = 'en-US';
       this.recognition.onresult = this.onSpeechResult.bind(this);
-      this.recognition.onerror = this.onSpeechError.bind(this);
       this.recognition.onend = this.onSpeechEnd.bind(this);
-    } else {
-      console.warn('Speech recognition not supported in this browser.');
     }
   }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    console.log('Loading event with ID:', id);
     this.loadEvent(id);
   }
 
@@ -54,15 +49,12 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   loadEvent(id: number): void {
-    this.eventService.getEventById(id).subscribe({
-      next: (event: Event) => {
-        this.event = event;
-        this.checkIfJoined();
-      },
-      error: (err) => {
-        this.errorMessage = err.error?.message || 'Failed to load event. Check console for details.';
-        console.error('Load event error:', err);
-      }
+    this.eventService.getEventById(id).subscribe((event: Event) => {
+      this.event = {
+        ...event,
+        image: event.image ? (event.image.startsWith('http://') || event.image.startsWith('https://') ? event.image : `${this.apiBaseUrl}${event.image}`) : ''
+      };
+      this.checkIfJoined();
     });
   }
 
@@ -81,23 +73,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     }
 
     if (this.event && !this.isAlreadyJoined && this.event.seatsLeft > 0 && !this.event.isFull) {
-      this.eventService.joinEvent(this.event.id).subscribe({
-        next: () => {
-          this.speak('You have successfully joined the event!');
-          this.loadEvent(this.event!.id);
-        },
-        error: (err) => {
-          if (err.status === 403) {
-            this.speak('Access denied. Please ensure you are logged in with a valid account.');
-          } else if (err.status === 404) {
-            this.speak('Event not found. Please try another event.');
-          } else if (err.status === 400) {
-            this.speak(err.error?.message || 'Cannot join event. It may be full or you are already registered.');
-          } else {
-            this.speak('Failed to join event. Please try again.');
-          }
-          console.error('Join event error:', err);
-        }
+      this.eventService.joinEvent(this.event.id).subscribe(() => {
+        this.speak('You have successfully joined the event!');
+        this.loadEvent(this.event!.id);
       });
     } else if (this.isAlreadyJoined) {
       this.speak('You are already registered for this event!');
@@ -106,7 +84,6 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Voice Assistant Methods
   startVoiceAssistant(): void {
     if (!this.recognition) {
       this.speak('Voice recognition is not supported in this browser.');
@@ -125,20 +102,11 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   private onSpeechResult(event: SpeechRecognitionEvent): void {
     const transcript = event.results[0][0].transcript.toLowerCase().trim();
-    console.log('User said:', transcript);
-
-    // Simple NLP: Check for join/register intent
     if (transcript.includes('join') || transcript.includes('register') || transcript.includes('sign up')) {
       this.joinEvent();
     } else {
       this.speak('I heard you say: ' + transcript + '. To join the event, say "join event".');
     }
-  }
-
-  private onSpeechError(event: any): void {
-    console.error('Speech recognition error:', event.error);
-    this.speak('Sorry, I didn\'t catch that. Please try again.');
-    this.stopListening();
   }
 
   private onSpeechEnd(): void {

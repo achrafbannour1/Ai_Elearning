@@ -39,9 +39,20 @@ public class EventService {
     }
 
     public void deleteEvent(Long eventId) {
-        if (!eventRepository.existsById(eventId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event with ID " + eventId + " not found");
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event with ID " + eventId + " not found"));
+
+        // Remove the event from all users' event sets
+        for (User user : event.getUsers()) {
+            user.getEvents().remove(event);
+            userRepository.save(user); // Save each user to update the relationship
         }
+
+        // Clear the users from the event to ensure no references remain
+        event.getUsers().clear();
+        eventRepository.save(event); // Save the event to update the relationship
+
+        // Now delete the event
         eventRepository.deleteById(eventId);
     }
 
