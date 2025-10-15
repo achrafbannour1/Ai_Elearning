@@ -32,6 +32,8 @@ export const routes: Routes = [
 
   {path:'subscription',component: SubscriptionComponent},
   { path: 'success', component: SuccessComponent },
+    {path: 'revenus' , component: RevenusComponent}
+
 
 
 
