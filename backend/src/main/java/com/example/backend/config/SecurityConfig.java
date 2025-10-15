@@ -62,8 +62,6 @@ public class SecurityConfig {
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                .cors(cors -> cors.disable());
         return http.build();
     }
     @Bean

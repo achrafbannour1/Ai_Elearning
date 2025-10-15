@@ -25,19 +25,21 @@ public class WebConfig {
 
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                // Serve exams from local folder
                 registry.addResourceHandler("/exams/**")
-                        .addResourceLocations("file:///C:/exams/");
+                        .addResourceLocations("file:///C:/exams/")
+                        .setCachePeriod(0); // optional: disable caching
+
+                // Serve static images
+                registry.addResourceHandler("/images/**")
+                        .addResourceLocations(
+                                "classpath:/static/images/",
+                                "file:src/main/resources/static/images/"
+                        )
+                        .setCachePeriod(0); // Disable caching for development
             }
+
         };
     }
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Serve static images
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations(
-                        "classpath:/static/images/",
-                        "file:src/main/resources/static/images/"
-                )
-                .setCachePeriod(0); // Disable caching for development
-    }
+
 }
