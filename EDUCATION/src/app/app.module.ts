@@ -16,15 +16,12 @@ import { EventComponent } from './core/event/event.component';
 import { EventDetailComponent } from './core/event-detail/event-detail.component';
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import { AiChatBubbleComponent } from './core/ai-chat-bubble/ai-chat-bubble.component';
-<<<<<<< HEAD
+
 import { AdminDashboardComponent } from './core/admin-dashboard/admin-dashboard.component';
-=======
 import { SubscriptionComponent } from './core/subscription/subscription.component';
 import { SuccessComponent } from './core/pages/success/success.component';
 import { NgChartsModule } from 'ng2-charts';
 import { RevenusComponent } from './core/revenus/revenus.component';
->>>>>>> 789b657 (first commit)
-
 
 
 @NgModule({
@@ -35,13 +32,10 @@ import { RevenusComponent } from './core/revenus/revenus.component';
     EventComponent,
     EventDetailComponent,
     AiChatBubbleComponent,
-<<<<<<< HEAD
-    AdminDashboardComponent
-=======
+    AdminDashboardComponent,
     SubscriptionComponent,
     SuccessComponent,
     RevenusComponent
->>>>>>> 789b657 (first commit)
   ],
     imports: [
         BrowserModule,

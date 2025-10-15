@@ -5,13 +5,13 @@ import { RegisterComponent } from './core/register/register.component';
 import { NgModule } from '@angular/core';
 import {EventComponent} from "./core/event/event.component";
 import {EventDetailComponent} from "./core/event-detail/event-detail.component";
-<<<<<<< HEAD
+
 import {AdminDashboardComponent} from "./core/admin-dashboard/admin-dashboard.component";
-=======
+
 import { SubscriptionComponent } from './core/subscription/subscription.component';
 import { SuccessComponent } from './core/pages/success/success.component';
 import { RevenusComponent } from './core/revenus/revenus.component';
->>>>>>> 789b657 (first commit)
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, title: 'E-learning | Home' },
@@ -27,17 +27,17 @@ export const routes: Routes = [
   { path: 'docs', component: HomeComponent, title: 'Docs' },
   { path: 'events', component: EventComponent, title: 'E-learning | Events' },
   {path: 'event/:id', component: EventDetailComponent},
-<<<<<<< HEAD
+
   { path: 'admin', component: AdminDashboardComponent, title: 'Admin Dashboard' },
-=======
+
   {path:'subscription',component: SubscriptionComponent},
   { path: 'success', component: SuccessComponent },
-  {path: 'revenus' , component: RevenusComponent}
 
->>>>>>> 789b657 (first commit)
+
+
+
 
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
