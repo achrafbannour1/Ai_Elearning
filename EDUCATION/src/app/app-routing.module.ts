@@ -5,6 +5,7 @@ import { RegisterComponent } from './core/register/register.component';
 import { NgModule } from '@angular/core';
 import {EventComponent} from "./core/event/event.component";
 import {EventDetailComponent} from "./core/event-detail/event-detail.component";
+import { ExamenComponent } from './examen/examen.component';
 
 import {AdminDashboardComponent} from "./core/admin-dashboard/admin-dashboard.component";
 
@@ -24,7 +25,7 @@ export const routes: Routes = [
   { path: 'mentor', component: HomeComponent, title: 'Mentor' },
   { path: 'group', component: HomeComponent, title: 'Group' },
   { path: 'testimonial', component: HomeComponent, title: 'Testimonial' },
-  { path: 'docs', component: HomeComponent, title: 'Docs' },
+  { path: 'examen', component: ExamenComponent, title: 'examen' },
   { path: 'events', component: EventComponent, title: 'E-learning | Events' },
   {path: 'event/:id', component: EventDetailComponent},
 

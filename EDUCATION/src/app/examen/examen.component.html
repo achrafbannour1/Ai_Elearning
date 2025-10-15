@@ -1,0 +1,104 @@
+<body>
+  <form [formGroup]="examenForm" (ngSubmit)="onSubmit()">
+    <!-- Titre -->
+    <h2 class="form-title">Créer un Examen</h2>
+
+    <!-- Sujet -->
+    <div class="form-group">
+      <label for="topic">Sujet</label>
+      <input
+        type="text"
+        formControlName="topic"
+        placeholder="Entrez le sujet de l'examen"
+      />
+    </div>
+
+    <!-- Nombre de QCM -->
+    <div class="form-group">
+      <label for="numMCQ">Nombre de QCM</label>
+      <input
+        id="numMCQ"
+        type="number"
+        formControlName="numMCQ"
+        placeholder="Ex: 10"
+      />
+    </div>
+
+    <!-- Nombre de Vrai/Faux -->
+    <div class="form-group">
+      <label for="numTrueFalse">Nombre de questions Vrai/Faux</label>
+      <input
+        id="numTrueFalse"
+        type="number"
+        formControlName="numTrueFalse"
+        placeholder="Ex: 5"
+      />
+    </div>
+
+    <!-- Nombre de Réponses Courtes -->
+    <div class="form-group">
+      <label for="numShortAnswer">Nombre de réponses courtes</label>
+      <input
+        id="numShortAnswer"
+        type="number"
+        formControlName="numShortAnswer"
+        placeholder="Ex: 3"
+      />
+    </div>
+
+    <!-- Difficulté -->
+    <div class="form-group">
+      <label for="difficulty">Niveau de difficulté</label>
+      <select id="difficulty" formControlName="difficulty">
+        <option value="" disabled selected>Sélectionnez un niveau</option>
+        <option value="Facile">Facile</option>
+        <option value="Moyen">Moyen</option>
+        <option value="Difficile">Difficile</option>
+      </select>
+    </div>
+
+    <!-- Bouton -->
+    <button type="submit" [disabled]="examenForm.invalid">Créer</button>
+    <div *ngIf="loading" class="loading">⏳ Génération en cours...</div>
+    <!-- Message d'erreur -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </form>
+
+  <!-- ✅ Exam generated card -->
+  <div *ngIf="questionPdfUrl || answerPdfUrl" class="pdf-card">
+    <h2 class="form-title">📄 Examen généré avec succès</h2>
+    <div class="pdf-links">
+      <a *ngIf="questionPdfUrl" [href]="questionPdfUrl" target="_blank" class="pdf-btn questions">
+        📘 Voir les questions
+      </a>
+      <a *ngIf="answerPdfUrl" [href]="answerPdfUrl" target="_blank" class="pdf-btn answers">
+        📗 Voir les réponses
+      </a>
+    </div>
+    <div *ngIf="examGenerated" class="pdf-card">
+    <h3>🧠 Ajuster ou Régénérer l'examen</h3>
+
+    <textarea [(ngModel)]="aiPrompt" placeholder="Décrivez les changements que vous voulez..."></textarea>
+    <button class="btn-ai" (click)="regenerateExam()">🔄 Générer un nouvel examen</button>
+
+  <div *ngIf="loading" class="loading">⏳ Génération en cours...</div>
+</div>
+  </div>
+  <div class="image-generator">
+  <textarea
+    [(ngModel)]="prompt"
+    placeholder="Décrivez l'image que vous voulez générer..."
+  ></textarea>
+
+  <button (click)="generate()" [disabled]="loading">
+    {{ loading ? 'Génération en cours...' : 'Générer une image' }}
+  </button>
+
+  <div *ngIf="generatedImageUrl" class="result">
+    <img [src]="generatedImageUrl" alt="Generated Image" />
+  </div>
+</div>
+
+</body>

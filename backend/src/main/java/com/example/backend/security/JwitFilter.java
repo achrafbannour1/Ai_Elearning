@@ -35,6 +35,16 @@ public class JwitFilter extends OncePerRequestFilter {
         }
 
 
+        String path = request.getRequestURI();
+
+        if (path.startsWith("/api/exam/generate-hf") ||
+                path.startsWith("/v3/api-docs") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/swagger-ui.html")) {
+            filterChain.doFilter(request, response);
+            return; // skip the rest of JWT logic
+        }
+
         final String authorizationHeader = request.getHeader("Authorization");
         String email = null;
         String jwt = null;

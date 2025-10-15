@@ -16,6 +16,7 @@ import { EventComponent } from './core/event/event.component';
 import { EventDetailComponent } from './core/event-detail/event-detail.component';
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import { AiChatBubbleComponent } from './core/ai-chat-bubble/ai-chat-bubble.component';
+import { ExamenComponent } from './examen/examen.component';
 
 import { AdminDashboardComponent } from './core/admin-dashboard/admin-dashboard.component';
 import { SubscriptionComponent } from './core/subscription/subscription.component';
@@ -35,7 +36,8 @@ import { RevenusComponent } from './core/revenus/revenus.component';
     AdminDashboardComponent,
     SubscriptionComponent,
     SuccessComponent,
-    RevenusComponent
+    RevenusComponent,
+    ExamenComponent
   ],
     imports: [
         BrowserModule,
