@@ -30,6 +30,23 @@ public class User {
     @Column(length = 20, nullable = false)
     private Role role;
 
+
+    @Column(name = "stripe_customer_id")
+    private String stripeCustomerId;
+
+    // ===== Getters et Setters =====
+
+    public String getStripeCustomerId() {
+        return stripeCustomerId;
+    }
+
+
+
+
+
+
+
+
     @ManyToMany
     @JoinTable(
             name = "user_events",
@@ -38,6 +55,11 @@ public class User {
     )
     @JsonIgnore
     private Set<Event> events = new HashSet<>();
+
+
+
+
+
 
     // Add this method
     public Collection<? extends GrantedAuthority> getAuthorities() {

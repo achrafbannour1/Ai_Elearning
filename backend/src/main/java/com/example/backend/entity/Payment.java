@@ -1,5 +1,6 @@
 package com.example.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,10 +25,15 @@ public class Payment {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    private String method; // e.g., Card, PayPal, etc.
-    private String status; // e.g., paid, pending, failed
+
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+
+    @Enumerated(EnumType.STRING)// e.g., Card, PayPal, etc.
+    private PaymentStatus paymentStatus; // e.g., paid, pending, failed
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "subscription_id", nullable = false)
     private Subscription subscription;
 }

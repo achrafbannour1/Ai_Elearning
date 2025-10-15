@@ -1,0 +1,42 @@
+/* success.component.css */
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh; /* centre verticalement */
+  background-color: #f0f9ff; /* léger bleu clair */
+  font-family: 'Arial', sans-serif;
+}
+
+h2 {
+  color: #28a745; /* vert succès */
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+p {
+  font-size: 1.2rem;
+  color: #333;
+  background-color: #e6f4ea; /* fond léger vert */
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+  word-break: break-all; /* pour le session_id long */
+}
+
+h2::after {
+  content: "🎉";
+  display: inline-block;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-10px); }
+}
+
+

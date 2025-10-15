@@ -38,10 +38,20 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/student/**").hasRole("STUDENT")
-                        .requestMatchers("/event/register/**").authenticated()  // Require login for joining
-                        .requestMatchers("/event/**").permitAll()  // Public for viewing events
+                        .requestMatchers("/event/register/**").authenticated()
+
+
+                                .requestMatchers("/api/payment/webhook").permitAll()
+                        .requestMatchers("/api/subscription/**").authenticated() // Subscription endpoints
+                        .requestMatchers("/api/payment/**").authenticated()   //
+                        .requestMatchers("/event/**").permitAll()
+
+
+                                .requestMatchers("/api/stripe/**").permitAll() //
+//
+
                         .requestMatchers("/api/ollama/**").authenticated()
                         .requestMatchers("/images/**").permitAll()
                         .anyRequest().authenticated()

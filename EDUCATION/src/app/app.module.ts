@@ -1,8 +1,6 @@
 // src/app/app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule, routes } from './app-routing.module';
 import { NavbarComponent } from './core/navbar/navbar.component';
@@ -18,7 +16,14 @@ import { EventComponent } from './core/event/event.component';
 import { EventDetailComponent } from './core/event-detail/event-detail.component';
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import { AiChatBubbleComponent } from './core/ai-chat-bubble/ai-chat-bubble.component';
+<<<<<<< HEAD
 import { AdminDashboardComponent } from './core/admin-dashboard/admin-dashboard.component';
+=======
+import { SubscriptionComponent } from './core/subscription/subscription.component';
+import { SuccessComponent } from './core/pages/success/success.component';
+import { NgChartsModule } from 'ng2-charts';
+import { RevenusComponent } from './core/revenus/revenus.component';
+>>>>>>> 789b657 (first commit)
 
 
 
@@ -30,7 +35,13 @@ import { AdminDashboardComponent } from './core/admin-dashboard/admin-dashboard.
     EventComponent,
     EventDetailComponent,
     AiChatBubbleComponent,
+<<<<<<< HEAD
     AdminDashboardComponent
+=======
+    SubscriptionComponent,
+    SuccessComponent,
+    RevenusComponent
+>>>>>>> 789b657 (first commit)
   ],
     imports: [
         BrowserModule,
@@ -43,6 +54,7 @@ import { AdminDashboardComponent } from './core/admin-dashboard/admin-dashboard.
         HttpClientModule,
         RecaptchaModule,
         FormsModule,
+        NgChartsModule
 
 
     ],

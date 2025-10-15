@@ -45,6 +45,15 @@ export class AuthService {
     return null;
   }
 
+
+  getUserId(): number | null {
+  const userInfo = this.getUserInfo();
+  if (userInfo && userInfo.id) {
+    return userInfo.id; // Assure-toi que le JWT contient bien "id"
+  }
+  return null;
+}
+
   logout() {
     localStorage.removeItem('jwtToken');
   }

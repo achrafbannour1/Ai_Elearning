@@ -1,0 +1,18 @@
+<div class="subscription-container">
+  <h2 class="title">Nos abonnements</h2>
+
+  <div class="cards-container">
+    <div class="card" *ngFor="let product of products">
+      <div class="card-header">
+        {{ product.name }}
+      </div>
+      <div class="card-body">
+        <p class="description">{{ product.description }}</p>
+        <p class="price">{{ product.price | currency:'EUR' }}/mois</p>
+        <button class="btn-subscribe" (click)="subscribe(product.priceId)">
+          S'abonner
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

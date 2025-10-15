@@ -1,5 +1,6 @@
 package com.example.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,13 +28,16 @@ public class Subscription {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
-    private String status; // e.g., active, expired, pending
+    @Enumerated(EnumType.STRING)
+    private SubscriptionStatus subscriptionStatus;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 
     @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Payment> payments = new HashSet<>();
 }
