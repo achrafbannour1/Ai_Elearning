@@ -4,6 +4,7 @@ import com.example.backend.security.JwitFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -22,7 +23,6 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-
     @Autowired
     private JwitFilter jwtFilter;
 
@@ -31,7 +31,12 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // ✅ Préflight CORS
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // ✅ Auth publique
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
@@ -54,16 +59,51 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/ollama/**").authenticated()
                         .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+                        // ✅ Rôles
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/student/**").hasRole("STUDENT")
+
+                        // ✅ Events
+                        .requestMatchers("/event/register/**").authenticated()
+                        .requestMatchers("/event/**").permitAll()
+
+                        // ✅ Courses
+                        .requestMatchers("/course/register/**").authenticated()
+                        .requestMatchers("/course/**").permitAll()
+
+                        // ✅ Lessons
+                        .requestMatchers("/lesson/register/**").authenticated()
+
+                        // ✅ IA
+                        .requestMatchers("/ai/register/**").authenticated()
+                        .requestMatchers("/ai/**").permitAll()
+
+                        // ✅ OUVERTURE EXPLICITE CRUD LESSON (debug sans token)
+                        .requestMatchers(HttpMethod.POST,   "/lesson/add-lesson/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT,    "/lesson/modify-lesson").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/lesson/remove-lesson/**").permitAll()
+
+                        // ✅ IA résumé (POST) ouvert pour tests
+                        .requestMatchers(HttpMethod.POST, "/lesson/autosummary/**").permitAll()
+
+                        // ✅ le reste des endpoints Lesson (GET, etc.)
+                        .requestMatchers("/lesson/**").permitAll()
+
+                        // Exemples d’API protégées
+                        .requestMatchers("/api/ollama/**").authenticated()
+
+                        // Tout le reste nécessite une auth
                         .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
+        // Filtre JWT (les routes permitAll passeront quand même)
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -71,6 +111,7 @@ public class SecurityConfig {
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
+        // config.setExposedHeaders(List.of("Authorization")); // si besoin
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
@@ -86,7 +127,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-
 }

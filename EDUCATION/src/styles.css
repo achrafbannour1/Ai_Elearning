@@ -1,10 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* === Palette globale (compatible Sign in / Sign up) === */
 :root{
-  --brand:#5a54ff;       /* violet des boutons/trait actif */
-  --brand-soft:#ecebff;  /* violet pâle */
-  --dark:#0f1a2a;        /* couleur titres/brand */
-  --muted:#6b7280;       /* texte secondaire */
-  --bg:#f6f9ff;          /* fond des sections */
+  /* Couleurs branding */
+  --brand:#5a54ff;          /* violet/bleu principal */
+  --brand-strong:#000dff;   /* accent plus foncé (hover) */
+  --brand-soft:#ecebff;     /* fond doux / badges */
+
+  /* Texte & surfaces */
+  --dark:#0f1a2a;           /* titres/nav */
+  --text:#1d2355;           /* texte principal en admin */
+  --text-muted:#4a5480;     /* texte secondaire */
+
+  /* Fond & bordures */
+  --bg:#f6f9ff;             /* fond page admin */
+  --surface:#ffffff;        /* cartes/tables/modals */
+  --line:#dfe4ff;
+  --line-strong:#c9d0ff;
+
+  /* États */
+  --danger:#e93b59;
+
+  /* Ombres */
+  --shadow:0 18px 40px rgba(0,0,0,.12);
+  --shadow-sm:0 8px 18px rgba(0,0,0,.08);
+
+  /* ALIAS pour les composants (évite les boutons blancs) */
+  --primary: var(--brand);
+  --primary-strong: var(--brand-strong);
 }
 
 *{box-sizing:border-box}
@@ -23,7 +46,7 @@ body{
   padding-inline:16px;
 }
 
-/* boutons pill pour Sign In / Sign Up */
+/* boutons pill pour Sign In / Sign Up (pages d'auth) */
 .btn{
   display:inline-flex;
   align-items:center;
@@ -33,6 +56,8 @@ body{
   border-radius:999px;
   text-decoration:none;
   font-weight:600;
+  border:0;
+  cursor:pointer;
 }
 .btn.solid{
   background:var(--brand);

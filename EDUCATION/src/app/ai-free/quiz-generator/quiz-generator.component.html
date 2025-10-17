@@ -1,0 +1,96 @@
+<section class="ai-card">
+  <header class="ai-head">
+    <h3>🤖 Générateur de QCM</h3>
+    <small>Modèle : <code>google/flan-t5-base</code> (Transformers.js local)</small>
+  </header>
+
+  <form [formGroup]="form" class="ai-grid" (ngSubmit)="generate()">
+    <label>
+      Thème*
+      <input formControlName="topic" placeholder="ex: Spring Boot – REST controllers">
+    </label>
+
+    <label>
+      Niveau*
+      <select formControlName="level">
+        <option>débutant</option>
+        <option>intermédiaire</option>
+        <option>avancé</option>
+      </select>
+    </label>
+
+    <label>
+      Nb de questions*
+      <input type="number" formControlName="count" min="1" max="10">
+    </label>
+
+    <label style="grid-column: 1 / -1;">
+      Contexte (facultatif) — colle un extrait de cours pour des questions réelles
+      <textarea formControlName="context" rows="5" placeholder="ex: extrait PDF / notes de cours / chapitres..."></textarea>
+    </label>
+
+    <div class="actions">
+      <button class="btn primary" type="submit" [disabled]="loading()">Générer</button>
+    </div>
+  </form>
+
+  <p class="error" *ngIf="error()">{{ error() }}</p>
+  <p class="muted" *ngIf="loading()">Génération en cours…</p>
+
+  <div class="results" *ngIf="quiz().length">
+    <div class="toolbar">
+      <strong>Quiz généré</strong>
+      <div>
+        <button class="btn ghost" type="button" (click)="copyJson()">Copier JSON</button>
+      </div>
+    </div>
+
+    <ol class="quiz">
+      <li *ngFor="let q of quiz(); let i = index">
+        <h4>{{ i + 1 }}. {{ q.question }}</h4>
+
+        <!-- Radios A/B/C/D -->
+        <div class="options">
+          <label *ngFor="let opt of q.options; let j = index" class="opt">
+            <input
+              type="radio"
+              name="q{{ i }}"
+              [value]="letters[j]"
+              [disabled]="graded()"
+              (change)="selectOption(i, letters[j])"
+              [checked]="selected()[i] === letters[j]"
+            />
+            <span>{{ opt }}</span>
+          </label>
+        </div>
+
+        <!-- Correction locale (lettre) -->
+        <p class="answer" *ngIf="graded()">
+          <strong>Réponse correcte :</strong> {{ q.answer }}
+        </p>
+
+        <!-- Explication du dataset (si fournie par le modèle) -->
+        <p class="explain" *ngIf="graded() && q.explanation">
+          <strong>Pourquoi (jeu de données) :</strong> {{ q.explanation }}
+        </p>
+
+        <!-- Explication IA (vérification / justification) -->
+        <div class="ai-explain">
+          <button class="btn" type="button" (click)="explainWithAI(i)">Expliquer avec l'IA</button>
+          <p *ngIf="aiExplain()[i]" class="muted">{{ aiExplain()[i] }}</p>
+        </div>
+      </li>
+    </ol>
+
+    <!-- Score étudiant -->
+    <div class="scorebar">
+      <button class="btn primary" type="button" (click)="grade()" [disabled]="graded()">Corriger</button>
+      <span *ngIf="graded()"><strong>Score :</strong> {{ score() }} / {{ quiz().length }}</span>
+    </div>
+  </div>
+
+  <details class="raw" *ngIf="rawText()">
+    <summary>Voir le texte brut renvoyé</summary>
+    <pre>{{ rawText() }}</pre>
+  </details>
+</section>

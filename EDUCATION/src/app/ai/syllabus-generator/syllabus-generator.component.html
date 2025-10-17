@@ -1,0 +1,81 @@
+<div class="container compact">
+  <h2>Générer un plan de cours (IA locale)</h2>
+
+  <form [formGroup]="form" class="grid">
+    <label>
+      Titre*
+      <input formControlName="title" placeholder="ex: Spring Boot & Angular 16" />
+    </label>
+
+    <label>
+      Public (audience)
+      <input formControlName="audience" placeholder="ex: Étudiants GL 3e année" />
+    </label>
+
+    <label>
+      Niveau*
+      <select formControlName="level">
+        <option value="debutant">Débutant</option>
+        <option value="intermediaire">Intermédiaire</option>
+        <option value="avance">Avancé</option>
+      </select>
+    </label>
+
+    <label>
+      Durée (semaines)*
+      <input type="number" formControlName="duration" min="1" max="24" />
+    </label>
+
+    <button type="button" (click)="generate()" [disabled]="loading()">Générer</button>
+  </form>
+
+  <p class="error" *ngIf="error()">{{ error() }}</p>
+  <div class="loader" *ngIf="loading()">Génération en cours…</div>
+
+  <ng-container *ngIf="preview() as p">
+    <div class="preview-head">
+      <div>
+        <h3>{{ p.title }}</h3>
+        <small>Public : {{ p.audience || '—' }} • Niveau : {{ p.level }} • Durée : {{ p.duration }} sem.</small>
+      </div>
+      <button type="button" class="primary" (click)="useThisPlan()">Utiliser ce plan</button>
+    </div>
+
+    <div cdkDropList class="modules" (cdkDropListDropped)="dropModule($event)">
+      <div class="module" *ngFor="let m of p.modules; let mi = index" cdkDrag>
+        <div class="module-head">
+          <input [value]="m.title" (change)="renameModule(mi, $event)" />
+          <span class="drag-hint">⋮⋮</span>
+        </div>
+
+        <ul class="objectives">
+          <li *ngFor="let o of m.objectives">{{ o }}</li>
+        </ul>
+
+        <div
+          class="lessons-wrap"
+          cdkDropList
+          id="module__{{mi}}"
+          (cdkDropListDropped)="dropLesson($event, mi)"
+          [cdkDropListData]="m.lessons"
+        >
+          <div class="lesson" *ngFor="let l of m.lessons; let li = index" cdkDrag>
+            <input [value]="l.title" (change)="renameLesson(mi, li, $event)" />
+            <button class="danger small" type="button" (click)="removeLesson(mi, li)">Supprimer</button>
+          </div>
+        </div>
+
+        <div class="module-actions">
+          <button type="button" (click)="addLesson(mi)">+ Ajouter une leçon</button>
+        </div>
+
+        <div class="exercises">
+          <strong>Exercices : </strong>
+          <span *ngFor="let e of m.exercises; let last = last">
+            {{ e }}<ng-container *ngIf="!last">, </ng-container>
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

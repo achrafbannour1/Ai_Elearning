@@ -1,0 +1,42 @@
+<section class="wrap">
+  <header class="head">
+    <a routerLink="/student/courses" class="back" aria-label="Retour à tous les cours">← Tous les cours</a>
+    <div class="titles">
+      <h2>Leçons</h2>
+      <p class="muted" *ngIf="course">Cours · {{ course.title }}</p>
+    </div>
+  </header>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="list">
+    <div class="row skeleton" *ngFor="let i of [0,1,2,3,4]"></div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!loading && error" class="alert alert--error" role="alert">{{ error }}</div>
+
+  <!-- Empty -->
+  <div *ngIf="!loading && !error && lessons.length === 0" class="alert">Aucune leçon.</div>
+
+  <!-- List -->
+  <ol *ngIf="!loading && !error && lessons.length > 0" class="list">
+    <li class="row" *ngFor="let l of lessons; let i = index; trackBy: trackById">
+      <div class="icn" aria-hidden="true">
+        <span class="badge">{{ i + 1 }}</span>
+      </div>
+
+      <div class="content">
+        <h3 class="title">{{ l.title }}</h3>
+        <p class="desc" *ngIf="l.content">{{ l.content }}</p>
+
+        <div class="row-meta">
+          <span class="meta-item">
+            <span class="emoji" aria-hidden="true">🕒</span> Lecture libre
+          </span>
+          <!-- Si tu ajoutes un lien PDF pour la leçon, tu peux activer un bouton ici -->
+          <!-- <a class="btn small" [href]="l.pdfUrl" target="_blank" rel="noopener">📄 Support</a> -->
+        </div>
+      </div>
+    </li>
+  </ol>
+</section>

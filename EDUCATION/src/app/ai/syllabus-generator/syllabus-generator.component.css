@@ -1,0 +1,66 @@
+/* ===== Styles de base ===== */
+.container { padding: 16px; max-width: 980px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+input, select { padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; }
+button { padding: 10px 14px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; background: #fff; }
+button.primary { background: #1a73e8; color: #fff; border-color: #1a73e8; }
+button.danger { background: #e53935; color: #fff; border-color: #e53935; }
+button.small { padding: 6px 10px; font-size: 12px; }
+.error { color: #d93025; margin: 8px 0; }
+.loader { padding: 8px 0; color: #555; }
+.preview-head { display: flex; align-items: center; justify-content: space-between; margin: 12px 0; gap: 12px; }
+.modules { display: grid; gap: 14px; }
+.module { border: 1px solid #e6e6e6; border-radius: 12px; padding: 12px; background: #fafafa; }
+.module-head { display: flex; align-items: center; gap: 8px; }
+.module-head input { flex: 1; font-weight: 600; }
+.drag-hint { color: #999; user-select: none; }
+.objectives { margin: 10px 0; padding-left: 18px; }
+.lessons-wrap { display: grid; gap: 8px; }
+.lesson { display: flex; gap: 8px; align-items: center; background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 8px; }
+.exercises { margin-top: 8px; color: #444; font-size: 14px; }
+.module-actions { margin-top: 8px; }
+
+/* ===== Mode compact : largeur/hauteur réduites, typographies/paddings allégés ===== */
+.container.compact { 
+  max-width: 560px;       /* largeur max réduite (980 -> 560) */
+  padding: 10px;
+  max-height: 70vh;       /* évite de dépasser l'écran */
+  overflow: auto;         /* scroll si contenu long */
+}
+
+.container.compact h2 { font-size: 1rem; margin: 0 0 8px; }
+.container.compact h3 { font-size: .98rem; margin: 0 0 4px; }
+.container.compact small { font-size: 12px; }
+
+.container.compact .grid { 
+  grid-template-columns: 1fr;  /* 1 colonne au lieu de 2 */
+  gap: 8px; 
+  margin-bottom: 8px; 
+}
+
+.container.compact label { font-size: 13px; }
+.container.compact input, 
+.container.compact select { 
+  padding: 6px 8px; 
+  font-size: 13px; 
+}
+
+.container.compact button { 
+  padding: 8px 10px; 
+  font-size: 13px; 
+}
+
+.container.compact .preview-head { 
+  margin: 8px 0; 
+  gap: 8px; 
+  align-items: flex-start;
+}
+
+.container.compact .modules { gap: 10px; }
+.container.compact .module { padding: 8px; border-radius: 10px; }
+.container.compact .module-head input { font-size: 14px; }
+.container.compact .objectives { margin: 6px 0; }
+.container.compact .lessons-wrap { gap: 6px; }
+.container.compact .lesson { padding: 6px; }
+.container.compact .exercises { margin-top: 6px; font-size: 12px; }

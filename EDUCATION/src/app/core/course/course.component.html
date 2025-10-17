@@ -1,0 +1,157 @@
+<div style="max-width:640px;margin:8px auto;">
+  <app-quiz-generator></app-quiz-generator>
+</div>
+
+
+<section class="page">
+  <header class="page-head">
+    <div class="title">
+      <h2>Cours</h2>
+    </div>
+
+    <div class="actions">
+      <div class="search">
+        <input type="search"
+               placeholder="Rechercher un cours…"
+               [value]="search"
+               (input)="onSearch($event)">
+        <span class="icon">🔎</span>
+      </div>
+
+      <button class="btn primary dark" (click)="openCreate()">
+        <span class="icon">＋</span> Ajouter un cours
+      </button>
+    </div>
+  </header>
+
+  <!-- Skeleton -->
+  <div *ngIf="loading" class="skeleton-table">
+    <div class="sk-row"></div><div class="sk-row"></div><div class="sk-row"></div>
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!loading && filtered().length === 0" class="empty">
+    <div class="empty-illu">📚</div>
+    <h3>Aucun cours</h3>
+    <p>Crée ton premier cours pour démarrer.</p>
+    <button class="btn primary dark" (click)="openCreate()">Créer un cours</button>
+  </div>
+
+  <!-- TABLE moderne -->
+  <div *ngIf="!loading && filtered().length" class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="width:80px">ID</th>
+          <th>Titre</th>
+          <th>Description</th>
+          <th style="width:120px">Ressource</th>
+          <th style="width:180px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of filtered(); trackBy: trackById">
+          <td class="muted">#{{ c.id }}</td>
+
+          <td>
+            <div class="cell-title" [title]="c.title">{{ c.title }}</div>
+          </td>
+
+          <td>
+            <div class="cell-desc" [title]="c.description">
+              {{ c.description }}
+            </div>
+          </td>
+
+          <td class="center">
+            <button class="btn icon" (click)="downloadCourse(c)" title="Télécharger PDF/Images">
+              📥
+            </button>
+          </td>
+
+          <td class="row-actions">
+            <a class="btn ghost" [routerLink]="['/courses', c.id, 'lessons']" title="Consulter les leçons">📄</a>
+            <button class="btn ghost" (click)="openEdit(c)" title="Modifier">✏️</button>
+            <button class="btn danger ghost" (click)="askDelete(c)" title="Supprimer">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MODAL centré -->
+  <div class="backdrop" *ngIf="modalOpen" (click)="closeModal()"></div>
+  <div class="modal centered" *ngIf="modalOpen" (click)="$event.stopPropagation()">
+    <div class="modal-head">
+      <h3>{{ form.value.id ? 'Modifier le cours' : 'Nouveau cours' }}</h3>
+      <button class="icon-btn" (click)="closeModal()">✖</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="modal-body">
+
+      <!-- 🔹 Bouton pour afficher/masquer le générateur IA -->
+      <div class="ai-toggle">
+        <button type="button" class="btn ghost" (click)="aiOpen = !aiOpen">
+          {{ aiOpen ? 'Fermer le générateur IA' : '✨ Générer avec IA' }}
+        </button>
+        <small class="muted" *ngIf="!aiOpen">
+          (Utilise l’IA pour proposer un titre et une description à partir d’un plan)
+        </small>
+      </div>
+
+      <!-- 🔹 Panneau IA (ton composant standalone) -->
+      <div class="ai-panel" *ngIf="aiOpen">
+        <app-syllabus-generator
+          [defaultTitle]="form.get('title')?.value || 'Nouveau cours'"
+          (syllabusSelected)="applySyllabus($event)">
+        </app-syllabus-generator>
+        <hr />
+      </div>
+
+      <!-- Champs existants -->
+      <label class="field">
+        <input formControlName="title" placeholder=" " autocomplete="off">
+        <span>Titre</span>
+        <small class="error" *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
+          Le titre est requis (min 2).
+        </small>
+      </label>
+
+      <label class="field">
+        <textarea rows="4" formControlName="description" placeholder=" "></textarea>
+        <span>Description</span>
+        <small class="error" *ngIf="form.get('description')?.invalid && form.get('description')?.touched">
+          La description est requise (min 2).
+        </small>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" (click)="closeModal()">Annuler</button>
+        <button type="submit" class="btn primary dark" [disabled]="form.invalid">
+          {{ form.value.id ? 'Enregistrer' : 'Créer' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- CONFIRM -->
+  <div class="backdrop" *ngIf="confirmOpen" (click)="cancelDelete()"></div>
+  <div class="modal small centered" *ngIf="confirmOpen" (click)="$event.stopPropagation()">
+    <div class="modal-head">
+      <h3>Supprimer ce cours ?</h3>
+      <button class="icon-btn" (click)="cancelDelete()">✖</button>
+    </div>
+    <div class="modal-body">
+      <p>Cette action est irréversible.</p>
+      <div class="modal-actions">
+        <button class="btn ghost" (click)="cancelDelete()">Annuler</button>
+        <button class="btn danger" (click)="confirmDelete()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" *ngIf="toast" [class.error]="toast?.type === 'error'">
+    {{ toast?.text }}
+  </div>
+</section>
