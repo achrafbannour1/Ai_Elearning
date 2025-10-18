@@ -47,6 +47,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/subscription/**").authenticated() // Subscription endpoints
                         .requestMatchers("/api/payment/**").authenticated()   //
                         .requestMatchers("/event/**").permitAll()
+                        .requestMatchers("/api/exam/**").permitAll()
+                        .requestMatchers("/api/voice/**").permitAll()
 
 
                                 .requestMatchers("/api/stripe/**").permitAll() //

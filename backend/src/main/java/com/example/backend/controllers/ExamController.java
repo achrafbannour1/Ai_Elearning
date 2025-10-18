@@ -149,6 +149,10 @@ public class ExamController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+    @GetMapping("/health")
+    public String health() {
+        return "✅ Voice API is running!";
+    }
 
 }
 

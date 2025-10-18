@@ -1,0 +1,237 @@
+<div class="voice-coach-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>🎙️ AI Voice Coach</h1>
+    <p>Practice your pronunciation with AI-powered feedback</p>
+  </div>
+
+  <!-- Configuration Warning Banner -->
+  <div class="warning-banner" *ngIf="showConfigWarning">
+    <div class="warning-content">
+      <h3>⚠️ Configuration Required</h3>
+      <div *ngIf="!backendReachable" class="warning-message">
+        <p><strong>Backend Not Reachable</strong></p>
+        <p>The backend server is not running or not accessible.</p>
+        <ul>
+          <li>Make sure the backend is running: <code>cd backend && ./mvnw spring-boot:run</code></li>
+          <li>Verify it's accessible at: <a href="http://localhost:8083/api/voice/health" target="_blank">http://localhost:8083/api/voice/health</a></li>
+          <li>Check for port conflicts or firewall issues</li>
+        </ul>
+      </div>
+      <div *ngIf="backendReachable && !apiConfigured" class="warning-message">
+        <p><strong>OpenAI API Key Not Configured</strong></p>
+        <p>The Text-to-Speech and pronunciation analysis features require an OpenAI API key.</p>
+        <ul>
+          <li>Get your API key from: <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a></li>
+          <li>Add it to: <code>backend/src/main/resources/application.properties</code></li>
+          <li>Set: <code>openai.api.key=sk-proj-YOUR_KEY_HERE</code></li>
+          <li>Restart the backend server</li>
+        </ul>
+        <p><em>Note: You can still record audio, but AI features won't work without the API key.</em></p>
+      </div>
+      <button (click)="checkBackendHealth()" class="retry-config-btn">🔄 Retry Connection</button>
+      <button (click)="showConfigWarning = false" class="dismiss-btn">✕ Dismiss</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Left Panel: Exercise Selection -->
+    <div class="left-panel">
+      <div class="section-card">
+        <h2>📚 Select Exercise</h2>
+        
+        <!-- Difficulty Filter -->
+        <div class="difficulty-filter">
+          <button 
+            *ngFor="let diff of ['All', 'Easy', 'Medium', 'Hard']"
+            [class.active]="selectedDifficulty === diff"
+            (click)="filterByDifficulty(diff)"
+            [disabled]="isRecording || isAnalyzing"
+            class="filter-btn">
+            {{ diff }}
+          </button>
+        </div>
+
+        <!-- Exercise List -->
+        <div class="exercise-list">
+          <div 
+            *ngFor="let exercise of exercises"
+            [class.selected]="selectedExercise?.id === exercise.id"
+            [class.disabled]="isRecording || isAnalyzing"
+            (click)="!isRecording && !isAnalyzing && selectExercise(exercise)"
+            class="exercise-item">
+            <div class="exercise-header">
+              <span class="exercise-difficulty" [attr.data-difficulty]="exercise.difficulty">
+                {{ exercise.difficulty }}
+              </span>
+              <span class="exercise-category">{{ exercise.category }}</span>
+            </div>
+            <p class="exercise-text">{{ exercise.sentence }}</p>
+          </div>
+        </div>
+
+        <button 
+          (click)="selectRandomExercise()" 
+          [disabled]="isRecording || isAnalyzing"
+          class="random-btn">
+          🎲 Random Exercise
+        </button>
+      </div>
+
+      <!-- Attempt History -->
+      <div class="section-card history-card" *ngIf="attemptHistory.length > 0">
+        <h3>📊 Recent Attempts</h3>
+        <div class="history-list">
+          <div *ngFor="let attempt of attemptHistory" class="history-item">
+            <div class="history-score" [style.color]="getScoreColor(attempt.score)">
+              {{ attempt.score }}%
+            </div>
+            <div class="history-details">
+              <p class="history-sentence">{{ attempt.sentence.substring(0, 30) }}...</p>
+              <p class="history-time">{{ attempt.timestamp | date:'short' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel: Practice Area -->
+    <div class="right-panel">
+      <!-- Current Exercise -->
+      <div class="section-card practice-card">
+        <h2>🎯 Current Exercise</h2>
+        
+        <div class="sentence-display">
+          <p class="sentence-text">{{ currentSentence }}</p>
+          <button 
+            (click)="playExampleWithBrowserTTS()" 
+            [disabled]="isPlayingExample || isRecording || isAnalyzing"
+            class="play-example-btn">
+            <span *ngIf="!isPlayingExample">🔊 Listen to Example</span>
+            <span *ngIf="isPlayingExample">🔊 Playing...</span>
+          </button>
+        </div>
+
+        <!-- Recording Controls -->
+        <div class="recording-controls">
+          <div class="recording-status" *ngIf="isRecording">
+            <div class="pulse-animation"></div>
+            <span>Recording: {{ formatTime(recordingTime) }}</span>
+          </div>
+
+          <div class="control-buttons">
+            <button 
+              *ngIf="!isRecording && !isAnalyzing"
+              (click)="startRecording()"
+              [disabled]="isPlayingExample"
+              class="record-btn start">
+              🎙️ Start Recording
+            </button>
+            
+            <button 
+              *ngIf="isRecording"
+              (click)="stopRecording()"
+              class="record-btn stop">
+              ⏹️ Stop Recording
+            </button>
+
+            <button 
+              *ngIf="hasRecorded && !isRecording && !isAnalyzing"
+              (click)="resetAnalysis()"
+              class="reset-btn">
+              🔄 Try Again
+            </button>
+          </div>
+        </div>
+
+        <!-- Audio Playback -->
+        <div class="audio-player" *ngIf="audioUrl && !isRecording">
+          <h3>Your Recording:</h3>
+          <audio [src]="audioUrl" controls></audio>
+        </div>
+
+        <!-- Analysis Loading -->
+        <div class="analysis-loading" *ngIf="isAnalyzing">
+          <div class="spinner"></div>
+          <p>Analyzing your pronunciation...</p>
+        </div>
+
+        <!-- Analysis Results -->
+        <div class="analysis-results" *ngIf="analysisResult">
+          <!-- Score Display -->
+          <div class="score-display">
+            <div class="score-circle" [style.border-color]="getScoreColor(analysisResult.score)">
+              <div class="score-number" [style.color]="getScoreColor(analysisResult.score)">
+                {{ analysisResult.score | number:'1.2-2' }}
+              </div>
+              <div class="score-label">{{ getScoreLabel(analysisResult.score) }}</div>
+            </div>
+          </div>
+
+          <!-- Transcription Comparison -->
+          <div class="comparison-section">
+            <div class="comparison-item">
+              <h4>📝 Expected:</h4>
+              <p class="expected-text">{{ analysisResult.originalText }}</p>
+            </div>
+            <div class="comparison-item">
+              <h4>🎤 You Said:</h4>
+              <p class="transcribed-text">{{ analysisResult.transcription }}</p>
+            </div>
+          </div>
+
+          <!-- Feedback -->
+          <div class="feedback-section">
+            <h4>💡 Feedback:</h4>
+            <p class="feedback-text">{{ analysisResult.feedback }}</p>
+          </div>
+
+          <!-- Pronunciation Errors -->
+
+          <!-- Suggestions -->
+
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button 
+              (click)="selectRandomExercise()" 
+              [disabled]="isRecording || isAnalyzing"
+              class="next-btn">
+              ➡️ Next Exercise
+            </button>
+            <button 
+              (click)="resetAnalysis()" 
+              [disabled]="isRecording || isAnalyzing"
+              class="retry-btn">
+              🔄 Try This Again
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions-card">
+    <h3>📖 How to Use</h3>
+    <div class="instruction-steps">
+      <div class="step">
+        <span class="step-number">1</span>
+        <p>Select an exercise from the list or choose a random one</p>
+      </div>
+      <div class="step">
+        <span class="step-number">2</span>
+        <p>Click "Listen to Example" to hear correct pronunciation</p>
+      </div>
+      <div class="step">
+        <span class="step-number">3</span>
+        <p>Click "Start Recording" and read the sentence aloud</p>
+      </div>
+      <div class="step">
+        <span class="step-number">4</span>
+        <p>Get instant feedback with your pronunciation score and tips</p>
+      </div>
+    </div>
+  </div>
+</div>

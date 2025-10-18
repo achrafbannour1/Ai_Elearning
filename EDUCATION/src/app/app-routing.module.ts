@@ -12,6 +12,7 @@ import {AdminDashboardComponent} from "./core/admin-dashboard/admin-dashboard.co
 import { SubscriptionComponent } from './core/subscription/subscription.component';
 import { SuccessComponent } from './core/pages/success/success.component';
 import { RevenusComponent } from './core/revenus/revenus.component';
+import { VoiceCoachComponent } from './core/voice-coach/voice-coach.component';
 
 
 export const routes: Routes = [
@@ -26,6 +27,7 @@ export const routes: Routes = [
   { path: 'group', component: HomeComponent, title: 'Group' },
   { path: 'testimonial', component: HomeComponent, title: 'Testimonial' },
   { path: 'examen', component: ExamenComponent, title: 'examen' },
+  { path: 'voice', component: VoiceCoachComponent, title: 'examen' },
   { path: 'events', component: EventComponent, title: 'E-learning | Events' },
   {path: 'event/:id', component: EventDetailComponent},
 

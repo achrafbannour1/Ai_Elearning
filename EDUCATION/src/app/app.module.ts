@@ -23,6 +23,7 @@ import { SubscriptionComponent } from './core/subscription/subscription.componen
 import { SuccessComponent } from './core/pages/success/success.component';
 import { NgChartsModule } from 'ng2-charts';
 import { RevenusComponent } from './core/revenus/revenus.component';
+import { VoiceCoachComponent } from './core/voice-coach/voice-coach.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { RevenusComponent } from './core/revenus/revenus.component';
     SubscriptionComponent,
     SuccessComponent,
     RevenusComponent,
-    ExamenComponent
+    ExamenComponent,
+    VoiceCoachComponent
   ],
     imports: [
         BrowserModule,

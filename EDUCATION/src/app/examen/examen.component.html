@@ -86,19 +86,6 @@
   <div *ngIf="loading" class="loading">⏳ Génération en cours...</div>
 </div>
   </div>
-  <div class="image-generator">
-  <textarea
-    [(ngModel)]="prompt"
-    placeholder="Décrivez l'image que vous voulez générer..."
-  ></textarea>
 
-  <button (click)="generate()" [disabled]="loading">
-    {{ loading ? 'Génération en cours...' : 'Générer une image' }}
-  </button>
-
-  <div *ngIf="generatedImageUrl" class="result">
-    <img [src]="generatedImageUrl" alt="Generated Image" />
-  </div>
-</div>
 
 </body>
