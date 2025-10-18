@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/event/**").permitAll()
                         .requestMatchers("/api/exam/**").permitAll()
                         .requestMatchers("/api/voice/**").permitAll()
+                        .requestMatchers("/exams/**").permitAll()
 
 
                                 .requestMatchers("/api/stripe/**").permitAll() //
