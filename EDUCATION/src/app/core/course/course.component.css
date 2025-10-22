@@ -1,0 +1,131 @@
+/* ===== Thème clair compatible login (pas de :root ici !) ===== */
+
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--text);font-family:'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif}
+
+/* Page */
+.page{max-width:1100px;margin:24px auto;padding:0 16px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px}
+.title h2{margin:0;font-weight:800;letter-spacing:.2px;color:#11163c}
+.subtitle{margin:6px 0 0;color:var(--text-muted)}
+
+/* Barre d’actions */
+.actions{display:flex;gap:12px;align-items:center}
+.search{position:relative}
+.search input{
+  padding:12px 40px 12px 12px;background:#fff;border:1px solid var(--line);
+  border-radius:12px;color:#1f2558;min-width:280px;outline:none;transition:.2s;
+  box-shadow:var(--shadow-sm)
+}
+.search input::placeholder{color:#9aa3d1}
+.search input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(90,84,255,.25)}
+.search .icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);opacity:.9}
+
+/* Boutons (scopés au composant) */
+.btn{
+  border:1px solid var(--line);
+  background:#fff;
+  color:#1e2250;
+  padding:10px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:.2s;
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  box-shadow:var(--shadow-sm);
+}
+.btn:hover{transform:translateY(-1px)}
+/* Bouton bleu moderne & clair – utiliser variables globales (fallbacks inclus) */
+.btn.primary.dark{
+  background:linear-gradient(180deg, var(--primary, #5a54ff), var(--primary-strong, #000dff));
+  border-color:transparent;
+  color:#fff;
+  font-weight:700;
+  box-shadow:0 10px 26px rgba(0,13,255,.25)
+}
+.btn.primary.dark:hover{filter:brightness(1.05)}
+.btn.ghost{background:#fff}
+.btn.danger{background:#ffe9ee;border-color:#ffc2cf;color:#b31434}
+.btn.danger.ghost{background:#fff;color:#d12a48;border-color:#ffc2cf}
+.btn.icon{padding:8px 10px;border-radius:10px}
+
+/* Tableau clair & lisible */
+.table-wrap{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:auto;box-shadow:var(--shadow)}
+.table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}
+.table thead th{
+  position:sticky;top:0;
+  background:linear-gradient(180deg,#f3f5ff,#e9edff);
+  color:#1a1f4d;font-weight:800;text-align:left;border-bottom:1px solid var(--line-strong);padding:12px;letter-spacing:.2px
+}
+.table td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top;background:#fff}
+.table tbody tr:hover td{background:#f7f8ff}
+
+/* Cellules : titres/descr foncés & gras */
+.muted{color:#6a72a6}
+.center{text-align:center}
+
+.cell-title{
+  font-weight:800;color:#121741;line-height:1.22;word-break:break-word;
+}
+.cell-desc{
+  color:#26306a;font-weight:600;line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+  overflow:hidden;white-space:normal;word-break:break-word
+}
+
+.row-actions{display:flex;gap:8px;align-items:center}
+
+/* Skeleton */
+.skeleton-table .sk-row{
+  height:42px;background:linear-gradient(90deg,#eef1ff,#e3e8ff,#eef1ff);
+  background-size:200% 100%;animation:shimmer 1.2s infinite;margin:8px 0;border-radius:10px
+}
+
+/* Modal centré clair */
+.backdrop{position:fixed;inset:0;background:rgba(16,19,60,.35);backdrop-filter:blur(2px);z-index:50}
+.modal{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);
+  width:min(560px,92vw);background:var(--surface);border:1px solid var(--line);
+  border-radius:18px;box-shadow:0 40px 80px rgba(0,0,0,.20);z-index:60;animation:pop .16s ease-out forwards
+}
+.modal.small{width:min(420px,92vw)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:12px 14px}
+.modal-head h3{margin:0;color:#0d1444;font-weight:800}
+.icon-btn{background:#fff;border:1px solid var(--line);color:#1a1f4d;border-radius:10px;padding:6px 10px;cursor:pointer}
+.modal-body{padding:14px;display:flex;flex-direction:column;gap:12px}
+
+/* Champs */
+.field{position:relative;display:flex;flex-direction:column}
+.field > input,.field > textarea{
+  background:#fff;border:1px solid var(--line);color:#1a1f4d;
+  border-radius:12px;padding:14px 12px 12px;outline:none;transition:.2s;
+  box-shadow:var(--shadow-sm)
+}
+.field > input:focus,.field > textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(107,115,255,.25)}
+.field > span{position:absolute;left:12px;top:12px;color:#6570a8;font-size:12px;transition:.15s;pointer-events:none}
+.field > input:not(:placeholder-shown) + span,
+.field > textarea:not(:placeholder-shown) + span,
+.field > input:focus + span,
+.field > textarea:focus + span{
+  top:-8px;left:10px;background:var(--surface);padding:0 6px;border-radius:8px;color:#38407a;border:1px solid var(--line)
+}
+.error{color:#d5163a;font-size:12px;margin-top:4px;font-weight:600}
+
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+
+/* Toast clair */
+.toast{
+  position:fixed;right:16px;top:16px;background:#ffffff;color:#161b4a;
+  border:1px solid var(--line);padding:10px 14px;border-radius:12px;box-shadow:var(--shadow);z-index:70;font-weight:700
+}
+.toast.error{background:#ffeef2;border-color:#ffc4d0;color:#8a0e27}
+
+/* Animations */
+@keyframes pop{from{opacity:0;transform:translate(-50%,-50%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* ===== IA panel (ajouts légers) ===== */
+.ai-toggle { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.ai-panel { margin: 6px 0 10px; padding: 8px; border:1px dashed var(--line); border-radius:12px; background:#fbfbff; }
+.ai-panel hr { border:0; height:1px; background:var(--line); margin:10px 0 0; }
+

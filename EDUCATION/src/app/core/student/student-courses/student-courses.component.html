@@ -1,0 +1,57 @@
+<section class="wrap">
+  <header class="head">
+    <div>
+      <h2>Cours</h2>
+      <p>Explorez les cours publiés par l’enseignant.</p>
+    </div>
+  </header>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="grid-courses">
+    <div class="course-card skeleton" *ngFor="let i of [0,1,2,3,4,5]"></div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!loading && error" class="alert alert--error" role="alert">{{ error }}</div>
+
+  <!-- Empty -->
+  <div *ngIf="!loading && !error && courses.length === 0" class="alert">Aucun cours.</div>
+
+  <!-- Cards -->
+  <div *ngIf="!loading && !error && courses.length > 0" class="grid-courses">
+    <a
+      class="course-card"
+      *ngFor="let c of courses; trackBy: trackById"
+      [routerLink]="['/student/courses', c.id, 'lessons']"
+      [attr.aria-label]="'Voir les leçons du cours ' + (c.title || '')"
+    >
+      <!-- Image depuis assets -->
+      <div class="card-media">
+        <img
+          class="card-media__img"
+          [src]="getCourseImage(c)"
+          (error)="onImgError($event)"
+          [alt]="c.title || 'Illustration du cours'"
+          loading="lazy"
+        />
+        <span class="chip">Cours</span>
+        <div class="media-mask"></div>
+      </div>
+
+      <!-- Contenu -->
+      <div class="card-body">
+        <h3 class="title" [title]="c.title">{{ c.title }}</h3>
+        <p class="desc" *ngIf="c.description">{{ c.description }}</p>
+
+        <div class="meta">
+          <div class="meta-item">
+            <span class="emoji" aria-hidden="true">📚</span>
+            <span>{{ (c.lessons?.length || 0) }} leçon(s)</span>
+          </div>
+          <div class="spacer"></div>
+          <div class="cta">Voir les leçons →</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>

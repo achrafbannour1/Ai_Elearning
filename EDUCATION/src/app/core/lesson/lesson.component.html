@@ -1,0 +1,144 @@
+<p class="breadcrumb">
+  <a routerLink="/courses">← Retour aux cours</a>
+</p>
+
+<section class="page" *ngIf="course as c">
+  <header class="page-head">
+    <div class="title">
+      <h2>{{ c.title }}</h2>
+      <p class="subtitle">#{{ c.id }} — {{ c.description }}</p>
+    </div>
+
+    <div class="actions">
+      <div class="search">
+        <input type="search"
+               placeholder="Rechercher une leçon…"
+               [value]="search"
+               (input)="onSearch($event)">
+        <span class="icon">🔎</span>
+      </div>
+      <button class="btn primary dark" (click)="openCreate()">
+        <span class="icon">＋</span> Ajouter une leçon
+      </button>
+    </div>
+  </header>
+
+  <!-- TABLE -->
+  <div *ngIf="!loading && filtered().length" class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="width:80px">ID</th>
+          <th>Titre</th>
+          <th>Contenu</th>
+          <th style="width:200px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let l of filtered(); trackBy: trackById">
+          <td class="muted">#{{ l.id }}</td>
+
+          <td>
+            <div class="cell-title" [title]="l.title">{{ l.title }}</div>
+          </td>
+
+          <td>
+            <!-- Contenu long avec Lire plus / Lire moins -->
+            <div class="cell-desc" [class.expanded]="expanded[l.id!]">
+              {{ l.content }}
+            </div>
+            <button class="btn link"
+                    *ngIf="(l.content?.length || 0) > 260"
+                    (click)="toggleExpand(l)">
+              {{ expanded[l.id!] ? 'Lire moins' : 'Lire plus' }}
+            </button>
+          </td>
+
+          <td class="row-actions">
+            <button class="btn ghost" (click)="openEdit(l)" title="Modifier">✏️</button>
+            <button class="btn danger ghost" (click)="askDelete(l)" title="Supprimer">🗑️</button>
+            <button class="btn ai-tool" (click)="generateSummary(l.id!)" title="Générer résumé IA">
+              🤖 Résumé IA
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Aucun résultat -->
+  <div *ngIf="!loading && filtered().length === 0" class="empty">
+    <h3>Aucune leçon</h3>
+    <p>Ajoute la première leçon de ce cours.</p>
+    <button class="btn primary dark" (click)="openCreate()">Créer une leçon</button>
+  </div>
+
+  <!-- Résumé IA (affichage temporaire) -->
+  <div *ngIf="summaryVisible">
+    <div *ngIf="loadingSummary" class="ai-box">
+      <div class="spinner"></div>
+      <p>Analyse IA en cours...</p>
+    </div>
+
+    <div *ngIf="aiSummary && !loadingSummary" class="ai-summary-card">
+      <h3>🧠 Résumé généré par l’IA :</h3>
+      <p>{{ aiSummary }}</p>
+      <small class="hint">*Ce résumé s’effacera automatiquement après quelques secondes*</small>
+    </div>
+  </div>
+
+  <!-- ========= MODAL CRÉER / MODIFIER ========= -->
+  <div class="backdrop" *ngIf="modalOpen" (click)="closeModal()"></div>
+  <div class="modal centered" *ngIf="modalOpen" (click)="$event.stopPropagation()">
+    <div class="modal-head">
+      <h3>{{ form.value.id ? 'Modifier la leçon' : 'Nouvelle leçon' }}</h3>
+      <button class="icon-btn" (click)="closeModal()">✖</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="modal-body">
+      <label class="field">
+        <input formControlName="title" placeholder=" " autocomplete="off">
+        <span>Titre</span>
+        <small class="error" *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
+          Le titre est requis.
+        </small>
+      </label>
+
+      <label class="field">
+        <textarea rows="8" formControlName="content" placeholder=" "></textarea>
+        <span>Contenu (long accepté)</span>
+        <small class="error" *ngIf="form.get('content')?.invalid && form.get('content')?.touched">
+          Le contenu est requis.
+        </small>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" (click)="closeModal()">Annuler</button>
+        <button type="submit" class="btn primary dark" [disabled]="form.invalid">
+          {{ form.value.id ? 'Enregistrer' : 'Créer' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ========= CONFIRM SUPPRESSION ========= -->
+  <div class="backdrop" *ngIf="confirmOpen" (click)="cancelDelete()"></div>
+  <div class="modal small centered" *ngIf="confirmOpen" (click)="$event.stopPropagation()">
+    <div class="modal-head">
+      <h3>Supprimer cette leçon ?</h3>
+      <button class="icon-btn" (click)="cancelDelete()">✖</button>
+    </div>
+    <div class="modal-body">
+      <p>Cette action est définitive.</p>
+      <div class="modal-actions">
+        <button class="btn ghost" (click)="cancelDelete()">Annuler</button>
+        <button class="btn danger" (click)="confirmDelete()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" *ngIf="toast" [class.error]="toast?.type === 'error'">
+    {{ toast?.text }}
+  </div>
+</section>

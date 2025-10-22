@@ -1,0 +1,57 @@
+<section class="ai-card">
+  <header class="ai-head">
+    <h3>🤖 Générateur de QCM (gratuit via Hugging Face)</h3>
+    <small>Modèle : <code>google/flan-t5-base</code> • 100% front</small>
+  </header>
+
+  <form [formGroup]="form" class="ai-grid" (ngSubmit)="generate()">
+    <label>
+      Thème*
+      <input formControlName="topic" placeholder="ex: Spring Boot – REST controllers">
+    </label>
+
+    <label>
+      Niveau*
+      <select formControlName="level">
+        <option>débutant</option>
+        <option>intermédiaire</option>
+        <option>avancé</option>
+      </select>
+    </label>
+
+    <label>
+      Nb de questions*
+      <input type="number" formControlName="count" min="1" max="10">
+    </label>
+
+    <div class="actions">
+      <button class="btn primary" type="submit" [disabled]="loading()">Générer</button>
+    </div>
+  </form>
+
+  <p class="error" *ngIf="error()">{{ error() }}</p>
+  <p class="muted" *ngIf="loading()">Génération en cours…</p>
+
+  <div class="results" *ngIf="quiz().length">
+    <div class="toolbar">
+      <strong>Résultats</strong>
+      <button class="btn ghost" type="button" (click)="copyJson()">Copier JSON</button>
+    </div>
+
+    <ol class="quiz">
+      <li *ngFor="let q of quiz(); let i = index">
+        <h4>{{ i + 1 }}. {{ q.question }}</h4>
+        <ul>
+          <li *ngFor="let opt of q.options">{{ opt }}</li>
+        </ul>
+        <p class="answer"><strong>Réponse :</strong> {{ q.answer }}</p>
+        <p class="explain" *ngIf="q.explanation"><strong>Pourquoi :</strong> {{ q.explanation }}</p>
+      </li>
+    </ol>
+  </div>
+
+  <details class="raw" *ngIf="rawText()">
+    <summary>Voir le texte brut renvoyé</summary>
+    <pre>{{ rawText() }}</pre>
+  </details>
+</section>

@@ -1,0 +1,181 @@
+/* ===== Thème clair identique à Courses — LESSONS ===== */
+
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--text);font-family:'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif}
+
+/* Fil d’Ariane */
+.breadcrumb{max-width:1100px;margin:12px auto 0;padding:0 16px}
+.breadcrumb a{color:#2b3170;text-decoration:none;font-weight:600}
+.breadcrumb a:hover{text-decoration:underline}
+
+/* Page */
+.page{max-width:1100px;margin:8px auto 24px;padding:0 16px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px}
+.title h2{margin:0;color:#11163c;font-weight:800}
+.subtitle{margin:6px 0 0;color:var(--text-muted)}
+
+/* Actions + recherche */
+.actions{display:flex;gap:12px;align-items:center}
+.search{position:relative}
+.search input{
+  padding:12px 40px 12px 12px;background:#fff;border:1px solid var(--line);
+  border-radius:12px;color:#1f2558;min-width:280px;outline:none;transition:.2s;
+  box-shadow:var(--shadow-sm)
+}
+.search input::placeholder{color:#9aa3d1}
+.search input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(107,115,255,.25)}
+.search .icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);opacity:.9}
+
+/* Boutons (spécifiques à la page) */
+.btn{
+  border:1px solid var(--line);background:#fff;color:#1e2250;
+  padding:10px 14px;border-radius:12px;cursor:pointer;transition:.2s;display:inline-flex;gap:8px;align-items:center;
+  box-shadow:var(--shadow-sm)
+}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary.dark{
+  background:linear-gradient(180deg, var(--primary, #6b73ff), var(--primary-strong, #000dff));
+  border-color:transparent;color:#fff;font-weight:700;
+  box-shadow:0 10px 26px rgba(0,13,255,.25)
+}
+.btn.primary.dark:hover{filter:brightness(1.05)}
+.btn.ghost{background:#fff}
+.btn.danger{background:#ffe9ee;border-color:#ffc2cf;color:#b31434}
+.btn.danger.ghost{background:#fff;color:#d12a48;border-color:#ffc2cf}
+.btn.icon{padding:8px 10px;border-radius:10px}
+
+/* Tableau */
+.table-wrap{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:auto;box-shadow:var(--shadow)}
+.table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed}
+.table thead th{
+  position:sticky;top:0;background:linear-gradient(180deg,#f3f5ff,#e9edff);
+  color:#1a1f4d;font-weight:800;text-align:left;border-bottom:1px solid var(--line-strong);padding:12px;letter-spacing:.2px
+}
+.table td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top;background:#fff}
+.table tbody tr:hover td{background:#f7f8ff}
+
+/* Cellules lisibles (foncé & gras) */
+.muted{color:#6a72a6}
+.center{text-align:center}
+
+.cell-title{
+  font-weight:800;color:#121741;line-height:1.22;word-break:break-word;
+}
+
+/* Contenu long : clamp par défaut (3 lignes) */
+.cell-desc{
+  color:#26306a;font-weight:600;line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+  overflow:hidden;white-space:normal;word-break:break-word
+}
+/* Quand expanded = true, on enlève le clamp */
+.cell-desc.expanded{
+  display:block;
+  -webkit-line-clamp:unset;
+  overflow:visible;
+}
+
+/* Bouton lien “Lire plus / Lire moins” */
+.btn.link{
+  background:transparent;border:none;padding:0;margin-top:6px;
+  color:#2643e9;cursor:pointer;font-weight:700;font-size:.9rem;
+}
+.btn.link:hover{text-decoration:underline}
+
+.row-actions{display:flex;gap:8px;align-items:center}
+
+/* Skeleton */
+.skeleton-table .sk-row{
+  height:42px;background:linear-gradient(90deg,#eef1ff,#e3e8ff,#eef1ff);
+  background-size:200% 100%;animation:shimmer 1.2s infinite;margin:8px 0;border-radius:10px
+}
+
+/* Modals claires */
+.backdrop{position:fixed;inset:0;background:rgba(16,19,60,.35);backdrop-filter:blur(2px);z-index:50}
+.modal{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);
+  width:min(560px,92vw);background:var(--surface);border:1px solid var(--line);
+  border-radius:18px;box-shadow:0 40px 80px rgba(0,0,0,.20);z-index:60;animation:pop .16s ease-out forwards
+}
+.modal.small{width:min(420px,92vw)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:12px 14px}
+.modal-head h3{margin:0;color:#0d1444;font-weight:800}
+.icon-btn{background:#fff;border:1px solid var(--line);color:#1a1f4d;border-radius:10px;padding:6px 10px;cursor:pointer}
+.modal-body{padding:14px;display:flex;flex-direction:column;gap:12px}
+
+/* Champs */
+.field{position:relative;display:flex;flex-direction:column}
+.field > input,.field > textarea{
+  background:#fff;border:1px solid var(--line);color:#1a1f4d;
+  border-radius:12px;padding:14px 12px 12px;outline:none;transition:.2s;
+  box-shadow:var(--shadow-sm)
+}
+.field > input:focus,.field > textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(107,115,255,.25)}
+.field > span{position:absolute;left:12px;top:12px;color:#6570a8;font-size:12px;transition:.15s;pointer-events:none}
+.field > input:not(:placeholder-shown) + span,
+.field > textarea:not(:placeholder-shown) + span,
+.field > input:focus + span,
+.field > textarea:focus + span{
+  top:-8px;left:10px;background:var(--surface);padding:0 6px;border-radius:8px;color:#38407a;border:1px solid var(--line)
+}
+.error{color:#d5163a;font-size:12px;margin-top:4px;font-weight:600}
+
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+
+/* Toast clair */
+.toast{
+  position:fixed;right:16px;top:16px;background:#ffffff;color:#161b4a;
+  border:1px solid var(--line);padding:10px 14px;border-radius:12px;box-shadow:var(--shadow);z-index:70;font-weight:700
+}
+.toast.error{background:#ffeef2;border-color:#ffc4d0;color:#8a0e27}
+
+/* Animations */
+@keyframes pop{from{opacity:0;transform:translate(-50%,-50%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Bouton IA compact (même taille visuelle que les autres) */
+.btn.ai-tool {
+  background: linear-gradient(180deg, #0066ff, #0040cc);
+  border: 1px solid #0040cc;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 4px 10px rgba(0, 64, 204, 0.2);
+  transition: all 0.2s ease;
+  height: 36px;
+}
+.btn.ai-tool:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+/* Zone IA */
+.ai-box, .ai-summary-card {
+  margin: 20px auto;
+  max-width: 800px;
+  text-align: center;
+  padding: 16px;
+  background: #f9faff;
+  border-radius: 12px;
+  border: 1px solid #dbe1ff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.ai-summary-card h3 { margin-top: 0; color: #001b7a; }
+.hint { display: block; color: #7a7f9c; font-size: 0.8rem; margin-top: 6px; }
+
+.spinner {
+  margin: 0 auto 10px;
+  width: 26px;
+  height: 26px;
+  border: 3px solid #eee;
+  border-top: 3px solid #004cff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
